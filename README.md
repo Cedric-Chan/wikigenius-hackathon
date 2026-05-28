@@ -20,10 +20,10 @@
 ## Quick Links
 
 - [Proposal](01_Proposal/PROPOSAL.md)
+- [Research — Academic Foundation (Literature Map + Design Constraints)](02_Research/academic_foundation.md)
+- [Research — 学术文献关键启示（中文摘要）](02_Research/academic_takeaways_zh.md)
 - [Research — RAG vs KAG](02_Research/rag_vs_kag.md)
 - [Research — Git Comparison](02_Research/git_comparison.md)
-- [Research — Literature Map](02_Research/literature_map.md)
-- [Research — Design Constraints](02_Research/design_constraints.md)
 
 ## Status
 
