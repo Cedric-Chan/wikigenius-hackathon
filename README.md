@@ -15,17 +15,22 @@
 | `05_Demo/` | Demo script, screen recordings, walkthrough materials, talking points. |
 | `06_Submission/` | Final deliverables — submission form content, judging materials, slide deck. |
 | `assets/` | Shared visual assets — logos, diagrams, screenshots, brand elements. |
+| `pappers/` | Academic papers and literature references supporting the research phase. |
 
 ## Quick Links
 
 - [Proposal](01_Proposal/PROPOSAL.md)
+- [Research — RAG vs KAG](02_Research/rag_vs_kag.md)
+- [Research — Git Comparison](02_Research/git_comparison.md)
+- [Research — Literature Map](02_Research/literature_map.md)
+- [Research — Design Constraints](02_Research/design_constraints.md)
 
 ## Status
 
 | Phase | Status | Notes |
 |-------|--------|-------|
 | Proposal | Drafted | See `01_Proposal/PROPOSAL.md` |
-| Research | Not started | |
+| Research | In Progress | 6 docs + 10 paper PDFs — see `02_Research/README.md` |
 | Design | Not started | |
 | Build | Not started | |
 | Demo | Not started | |
@@ -33,4 +38,4 @@
 
 ---
 
-*Last updated: 2026-05-28*
+*Last updated: 2026-05-29*
