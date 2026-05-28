@@ -1,0 +1,40 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Secrets & env
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# Logs & temp
+*.log
+*.tmp
+*.bak
+tmp/
+temp/
+
+# Build artifacts (in case anything gets generated under 04_Build/)
+node_modules/
+dist/
+build/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Output files often not worth versioning (uncomment if needed)
+# *.pdf
+# *.pptx
+# *.docx
