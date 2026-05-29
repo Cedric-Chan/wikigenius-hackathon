@@ -25,9 +25,11 @@
 - [Research — RAG vs KAG](02_Research/rag_vs_kag.md)
 - [Research — Git Comparison](02_Research/git_comparison.md)
 - [Research — 载体还是竞品（Notion/Obsidian/Confluence/Lark Wiki）](02_Research/carrier_vs_competitor.md)
+- [Research — 工程实现参考（适合 WikiGenius 的开源仓库）](02_Research/tech_references.md)
 - [Design — Readiness Checklist](03_Design/design_readiness.md)
 - [Design — Ingest Pipeline (Decompose→Match→Merge)](03_Design/ingest_pipeline.md)
 - [Design — Lark Wiki MVP](03_Design/lark_wiki_mvp.md)
+- [Design — 协调协议 (D7 种子)](03_Design/coordination_protocol.md)
 
 ## Status
 

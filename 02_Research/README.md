@@ -13,13 +13,13 @@ Drop research artifacts here as you gather them.
 | [`rag_vs_kag.md`](rag_vs_kag.md) | Technical analysis: RAG (Retrieval-Augmented Generation) vs KAG (Knowledge-Augmented Generation) and WikiGenius's positioning. |
 | [`git_comparison.md`](git_comparison.md) | Version-control comparison: Git diff/merge/conflict resolution vs WikiGenius's knowledge graph approach. |
 | [`mega_agent_cli_anti_pattern.md`](mega_agent_cli_anti_pattern.md) | Design rationale: why a CLI-based "mega agent" is an anti-pattern for knowledge management. |
+| [`tech_references.md`](tech_references.md) | Engineering prior art: open-source repos for the 4 engine pillars (multi-agent + negotiation, knowledge graph + ingest, semantic conflict detection, CRDT/versioning). Headline: Graphiti. Python-first, fast-pick + future-grade per area. |
 
-## Suggested future research
+## Suggested future research (optional / deferred)
 
-- `competitive_landscape.md` — Notion AI, Glean, Guru, Mem, Coda AI, Slack AI; positioning vs WikiGenius
-- `user_interviews.md` — raw notes, quotes, pain-point tagging
-- `tech_references.md` — multi-agent coordination papers, knowledge graph systems, permission models
-- `market_signals.md` — adjacent product launches, funding, GTM signals
+- `competitive_landscape.md` — deep-dive on AI features (Notion AI, Confluence Rovo, Glean, Guru) to *evidence* the moat; re-score competitors on the 3 coordination conditions. **Medium priority** (pitch/positioning).
+- `user_interviews.md` — raw notes, quotes, pain-point tagging. **Low** — likely out of hackathon scope; rate-limit anecdote stands in.
+- `market_signals.md` — adjacent launches, funding, GTM. **Skip for hackathon.**
 
 ## Loose questions to answer here
 

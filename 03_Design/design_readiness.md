@@ -2,7 +2,7 @@
 
 > **用途.** Design 阶段要产出 product spec / UX flows / system architecture / agent protocol / data model（见本目录 [`README.md`](README.md)）。但要把这些做对，目前缺一批**决策和输入**。本文按"是否阻塞设计开始"分级罗列。🔴 需要你拍板，🟡 给方向后我们来设计。
 
-> **进度更新（2026-05-29）.** ✅ **B2** 已定（原型+演示+HTML，模板参考 beautiful-html-templates）。✅ **B3** 已定（Lark Wiki 为载体）——设计见 [`lark_wiki_mvp.md`](lark_wiki_mvp.md)。✅ **D2 入图 pipeline** 已落（Decompose-Match-Merge）——见 [`ingest_pipeline.md`](ingest_pipeline.md)，并部分回答 D1/D4/D12。⏳ **B1**（demo 楔子场景）仍待定。下一步阻塞项 = B1 + D7（协商协议）。
+> **进度更新（2026-05-29）.** ✅ **B2** 已定（原型+演示+HTML，模板参考 beautiful-html-templates）。✅ **B3** 已定（Lark Wiki 为载体）——设计见 [`lark_wiki_mvp.md`](lark_wiki_mvp.md)。✅ **D2 入图 pipeline** 已落（Decompose-Match-Merge）——见 [`ingest_pipeline.md`](ingest_pipeline.md)，并部分回答 D1/D4/D12。📚 **工程选型已调研**——见 [`../02_Research/tech_references.md`](../02_Research/tech_references.md)：头号引擎 **Graphiti**（双时态图+被取代+矛盾，待半天 spike），agents=CrewAI/LangGraph，矛盾=RefChecker/NLI，真值只用 Graphiti 双时态；**内部 agent 协调走框架原生 + MCP 包 lark-cli，A2A 降为未来可选（跨组织/跨厂商才需要，不进 MVP）**。⏳ **B1**（demo 楔子）仍待定。**下一步前置 = Graphiti spike + B1**，然后进 D1/D5/D7 细节。
 
 ---
 
@@ -33,7 +33,7 @@ Proposal 是抽象的产品愿景，但设计必须锚定**一个**最能体现"
 ### 一致性 / 冲突引擎（这是 The Hard Problem）
 - **D5. 语义矛盾检测的具体机制.** 纯 LLM 判断 / 规则引擎 / 混合？研究说"需要推理层"，但没有设计。
 - **D6. 冲突 vs 兼容更新的判定 + impact-scope 阈值.** "局部更新 vs 结构性变更"要操作化成可执行的判定。
-- **D7. 多 Agent 协商协议.** 状态机（proposed → negotiating → frozen → escalated → resolved）、消息格式、超时行为、升级链——Proposal 把它点名为核心难题，但还没有设计。
+- **D7. 多 Agent 协商协议.** 🌱 **种子已起**——见 [`coordination_protocol.md`](coordination_protocol.md)：Kanban 式状态机（submitted→evaluating→writing/conflict→negotiating→escalated→resolved）、原子认领=section 冻结、父子依赖=解冻、comment/IM 协商、TTL→升级。借 Hermes Kanban 协调模型。剩 §10 待定（认领粒度、多方并行协商、超时阈值等）。
 - **D8. 仲裁规则的显式化 + 版本化（C8 可靠性）.** 规则不能藏在 prompt 里，要显式、可版本控制。
 
 ### Agent 设计

@@ -2,6 +2,8 @@
 
 Source code, prototypes, and technical experiments.
 
+> **First experiment:** [`experiments/graphiti_spike.md`](experiments/graphiti_spike.md) — half-day go/no-go validation of Graphiti as the truth/graph engine (gates D1/D5; see `02_Research/tech_references.md` §6).
+
 ## Suggested contents
 
 - `prototype/` — working code, however rough
