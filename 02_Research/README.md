@@ -6,11 +6,10 @@ Drop research artifacts here as you gather them.
 
 | File | Description |
 |------|-------------|
-| [`academic_foundation.md`](academic_foundation.md) | **Primary output.** Merged Literature Map + Design Constraints. Maps 8 papers to 9 design decisions, extracts 12 actionable constraints with tests. |
+| [`academic_foundation.md`](academic_foundation.md) | **Primary output.** Literature Map + Design Constraints. Maps 8 papers to 9 design decisions, extracts 12 actionable constraints with tests. |
 | [`academic_takeaways_zh.md`](academic_takeaways_zh.md) | **中文速览.** Chinese summary of `academic_foundation.md` for team alignment. |
-| [`literature_map.md`](literature_map.md) | *(Legacy — superseded by `academic_foundation.md` Part I.)* Original standalone literature map. |
-| [`design_constraints.md`](design_constraints.md) | *(Legacy — superseded by `academic_foundation.md` Part II.)* Original standalone design constraints. |
 | [`km_trends.md`](km_trends.md) | Competitive landscape: Confluence, Notion, GitBook, Slite, Coda, Guru, Mem, Glean, Nuclino, Outline, Tettra, Siyuan, Logseq, Feishu, Slab. |
+| [`carrier_vs_competitor.md`](carrier_vs_competitor.md) | Strategic positioning: are Notion / Obsidian / Confluence / Lark Wiki competitors or carriers? Recommends Lark Wiki as the carrier for the multi-party team scenario. |
 | [`rag_vs_kag.md`](rag_vs_kag.md) | Technical analysis: RAG (Retrieval-Augmented Generation) vs KAG (Knowledge-Augmented Generation) and WikiGenius's positioning. |
 | [`git_comparison.md`](git_comparison.md) | Version-control comparison: Git diff/merge/conflict resolution vs WikiGenius's knowledge graph approach. |
 | [`mega_agent_cli_anti_pattern.md`](mega_agent_cli_anti_pattern.md) | Design rationale: why a CLI-based "mega agent" is an anti-pattern for knowledge management. |

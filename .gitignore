@@ -38,3 +38,4 @@ venv/
 # *.pdf
 # *.pptx
 # *.docx
+.gstack/

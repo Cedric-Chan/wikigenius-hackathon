@@ -2,6 +2,16 @@
 
 Product spec, system architecture, and agent protocol design live here.
 
+> **Start here:** [`design_readiness.md`](design_readiness.md) — what must be decided before/early in the design phase (🔴 blocking decisions + 🟡 design inputs).
+
+## Current design docs
+
+| File | Description |
+|------|-------------|
+| [`design_readiness.md`](design_readiness.md) | Blocking decisions + design inputs, with live progress status. |
+| [`ingest_pipeline.md`](ingest_pipeline.md) | **"Digest, don't pile"** — Decompose→Match→Merge as the *front half* of the change pipeline (User Agent ingestion → existing 3-dim evaluation), graph-grounded Match, agent-behavior `+` ops, native promotion gate (answers D2). |
+| [`lark_wiki_mvp.md`](lark_wiki_mvp.md) | Lark Wiki as carrier: concept→Lark-primitive mapping with **real lark-cli v1.0.43 commands**, permission mapping, two-tier agent flow, hackathon MVP shape (answers B3). |
+
 ## Suggested contents
 
 - `product_spec.md` — features, user stories, acceptance criteria, non-goals

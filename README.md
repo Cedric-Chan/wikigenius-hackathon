@@ -24,14 +24,18 @@
 - [Research — 学术文献关键启示（中文摘要）](02_Research/academic_takeaways_zh.md)
 - [Research — RAG vs KAG](02_Research/rag_vs_kag.md)
 - [Research — Git Comparison](02_Research/git_comparison.md)
+- [Research — 载体还是竞品（Notion/Obsidian/Confluence/Lark Wiki）](02_Research/carrier_vs_competitor.md)
+- [Design — Readiness Checklist](03_Design/design_readiness.md)
+- [Design — Ingest Pipeline (Decompose→Match→Merge)](03_Design/ingest_pipeline.md)
+- [Design — Lark Wiki MVP](03_Design/lark_wiki_mvp.md)
 
 ## Status
 
 | Phase | Status | Notes |
 |-------|--------|-------|
 | Proposal | Drafted | See `01_Proposal/PROPOSAL.md` |
-| Research | In Progress | 6 docs + 10 paper PDFs — see `02_Research/README.md` |
-| Design | Not started | |
+| Research | In Progress | 7 docs + 10 paper PDFs — see `02_Research/README.md` |
+| Design | In Progress | Carrier=Lark Wiki, ingest pipeline + MVP designed; awaiting B1 demo wedge — see `03_Design/` |
 | Build | Not started | |
 | Demo | Not started | |
 | Submission | Not started | |

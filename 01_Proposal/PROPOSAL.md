@@ -8,15 +8,27 @@
 
 ## Background
 
-The way teams work is changing fast. Global distribution, async collaboration, and AI-driven productivity have compressed output cycles while scattering knowledge across tools, time zones, and people. The result: docs go stale, ownership breaks down, and no one knows what's authoritative. The bottleneck is no longer execution — it's knowledge coherence.
+A backend engineer raises an API rate limit from 500 to 1000. The change is correct on its own. What she can't see: a decision doc Product archived three months ago that fixed the ceiling at 500 because anything higher breaks an SLA commitment. Nobody searches for what they don't know exists — so the team ships the contradiction and learns about it in production.
 
-We believe the AI era demands a fundamentally different approach to how teams manage information. Productivity reshapes structure: when knowledge flows reliably, teams coordinate at a different speed.
+This is the defining failure of team knowledge today. Output cycles have compressed, work has gone async and globally distributed, and AI has multiplied how fast everyone produces — knowledge now scatters across tools, time zones, and people faster than any team can reconcile it. Docs go stale, ownership erodes, no one can say what's authoritative. Every existing tool treats this as a storage problem: better folders, better search, better autocomplete. But the real loss isn't "we couldn't find it" — it's "we didn't know it existed, and it contradicted what we just did." That's not a retrieval gap a search box closes. The bottleneck is no longer execution; it's **knowledge coherence**.
+
+WikiGenius takes a different position. When an AI agent sits inside a team's knowledge layer, it doesn't just retrieve — it participates in setting what the team treats as true: what's current, what's superseded, who's accountable, and how disagreements get resolved. We aren't building a smarter wiki. We're building the layer that keeps a team's shared knowledge from contradicting itself.
+
+---
+
+## Three Shifts We're Betting On
+
+1. **From documents to graph.** File trees encode parent–child paths; real knowledge is a web of references, dependencies, and contradictions. One decision radiates into requirements, API design, test strategy, and runbooks at once. WikiGenius organizes by knowledge's functional role — active Projects, ongoing Areas, reference Archives — not by folder path.
+2. **From "people search" to "the agent surfaces."** The largest loss isn't failed search — it's not knowing you should search. WikiGenius runs continuous consistency scanning: the moment a change collides with an existing fact, the agent raises it, unprompted.
+3. **From "who wrote what" to "what's true now."** Git answers who changed which line. The more valuable question in team knowledge is which version the team currently stands behind. WikiGenius shifts the core problem from version history to **truth maintenance**.
 
 ---
 
 ## What We're Building
 
-WikiGenius is an AI-native team knowledge product built around a two-tier agent system. A **Team Wiki Agent** acts as the mega agent, owning the knowledge graph, managing access control, and continuously evaluating whether incoming changes are consistent with existing docs. Each team member operates through a personal **User Agent** that understands their role and working context, handles local queries, and escalates conflicts or gaps up to the Team Agent.
+WikiGenius is an AI-native team knowledge product built on a two-tier agent system. A **Team Wiki Agent** acts as the mega agent — owning the knowledge graph, managing access control, and continuously evaluating whether incoming changes stay consistent with existing knowledge. Each member operates through a personal **User Agent** that understands their role and working context, handles local queries, and escalates conflicts or gaps upward.
+
+The split is deliberate: the User Agent augments the individual (assistive AI), while the Team Agent connects related work and diagnoses contradictions (coach and diagnostic AI). WikiGenius is not the team's memory — documents do that. It is not the team's brain — people do that. It's the team's **consistency layer**: the immune system that keeps shared knowledge from quietly contradicting itself.
 
 ---
 
@@ -27,6 +39,20 @@ Organised in three layers inspired by PARA and GitHub repo best practices:
 - **Projects** — active or archived, each with an owner, lifecycle status, and optional cross-team membership. Contains Overview, README, Requirements, Decisions, Issues & Changes, and Resources.
 - **Areas** — ongoing functional domains (e.g. Engineering Standards, Risk Policy) with role-based permissions, never archived.
 - **Resources & Archives** — cross-project reference knowledge and read-only historical records.
+
+---
+
+## How Knowledge Enters: Digest, Don't Pile
+
+A wiki that appends every submission verbatim becomes a landfill, and a landfill costs more to maintain than it's worth. So WikiGenius treats documents as **living knowledge containers**, not inboxes. When raw input arrives — an article, a log, a decision, a chat thread — the User Agent **digests** it into the graph in three moves:
+
+1. **Decompose** — break the input into atomic claims, one assertion each, so every piece can be judged and placed on its own.
+2. **Match** — for each claim, find where it already lives in the knowledge graph: the node it enriches, the fact it updates, or the existing claim it contradicts.
+3. **Merge** — fold the claim into that node to enrich what's there. A new node is created *only* when nothing fits.
+
+A merge is a **proposed change, not a write** — it flows into the same three-dimensional evaluation every change faces (consistency, authority, impact scope; below). Decompose-Match-Merge is the *ingestion* half of that pipeline, not a parallel system: by the time a claim reaches evaluation, the Match step has already found its neighborhood and flagged whether it collides with anything, which is exactly what the consistency check needs.
+
+The discipline throughout is **restraint** — keep the core knowledge and the context needed to act on it, drop the rest. This is the write-time half of fighting knowledge bloat; truth-lossless compression (below) is the maintenance-time half. Together they keep the graph small enough to stay trustworthy, with knowledge filed by what it's *for* (its PARA layer), not by who submitted it.
 
 ---
 
@@ -97,4 +123,6 @@ Team Agent 不只是写入新知识的引擎，它同样是**知识压缩的执�
 
 ---
 
-*Last updated: 2026-05-28*
+*Grounded in research on transactive memory systems (Ren & Argote, 2011), the transactive systems model of collective intelligence (Gupta & Woolley, 2021), AI-mediated communication (Hancock et al., 2020), and human–AI trust (Glikson & Woolley, 2020). Full theory-to-design mapping and the 12 design constraints in [`02_Research/academic_foundation.md`](../02_Research/academic_foundation.md).*
+
+*Last updated: 2026-05-29*
