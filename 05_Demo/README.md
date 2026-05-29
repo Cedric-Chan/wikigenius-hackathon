@@ -2,7 +2,7 @@
 
 Everything needed to walk a judge through WikiGenius in 3–5 minutes.
 
-> **Ready:** [`demo_script.md`](demo_script.md) — ~4-min beat-by-beat golden path · [`seed_data.md`](seed_data.md) — preload fixtures. Both built on the confirmed B1 scenario (`../03_Design/b1_demo_scenario.md`).
+> **Ready:** [`demo_script.md`](demo_script.md) — ~4-min beat-by-beat golden path · [`seed_data.md`](seed_data.md) — preload fixtures · [`dashboard/index.html`](dashboard/index.html) — HTML dashboard skeleton (Signal template; one screen per beat, ← / → to navigate; `open` it or serve `05_Demo/dashboard/`). Built on the confirmed B1 scenario (`../03_Design/b1_demo_scenario.md`).
 
 ## Suggested contents
 

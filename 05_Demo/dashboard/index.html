@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WikiGenius — Team Agent Console (B1 demo skeleton)</title>
+
+    <!--
+      DESIGN SYSTEM: "Signal" from zarazhangrui/beautiful-html-templates.
+      Tokens, fonts, slide engine, and nav JS are reused faithfully (do not recolor / resubstitute fonts).
+      Dashboard panels below are new layouts designed IN the Signal system (per its AGENTS.md §5).
+      Self-contained skeleton: navigate beats with ← / → (or click the dots). Data = 05_Demo/seed_data.md.
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* ── ZONE A · TOKENS (Signal) ─────────────────────────────────────── */
+      :root {
+        --c-bg: #1c2644;
+        --c-bg-alt: #232f55;
+        --c-bg-light: #f0ece3;
+        --c-bg-light-alt: #e6e0d4;
+        --c-fg: #e2dcd0;
+        --c-fg-2: #8a96a8;
+        --c-fg-3: #4e5a6e;
+        --c-fg-light: #1a2030;
+        --c-fg-light-2: #5a6270;
+        --c-fg-light-3: #9aa0a8;
+        --c-accent: #c8a870;
+        --c-border: #2e3d5c;
+        --c-border-light: #cac4b4;
+        /* derived, palette-faithful state colors (no new hues outside the warm/sober family) */
+        --c-warn: #c8a870;
+        --c-bad: #b5705f;
+        --c-good: #7f9a73;
+
+        --f-display: "Source Serif 4", Georgia, serif;
+        --f-heading: "Source Serif 4", Georgia, serif;
+        --f-body: "DM Sans", system-ui, sans-serif;
+        --f-mono: "IBM Plex Mono", monospace;
+
+        --sz-h1: 3.4vw;
+        --sz-h2: 2.3vw;
+        --sz-h3: 1.5vw;
+        --sz-body: 1.0vw;
+        --sz-caption: 0.82vw;
+        --sz-label: 0.68vw;
+
+        --pad-x: 4.5vw;
+        --pad-y: 4vh;
+        --ease-slide: cubic-bezier(0.77, 0, 0.175, 1);
+        --dur-slide: 0.7s;
+        --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+        --dur-enter: 0.6s;
+      }
+
+      /* ── ZONE B · ENGINE (Signal, do not modify) ──────────────────────── */
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 100%; height: 100%; overflow: hidden; background: var(--c-bg); -webkit-font-smoothing: antialiased; }
+      #deck { display: flex; height: 100vh; transition: transform var(--dur-slide) var(--ease-slide); will-change: transform; }
+      .slide { flex: 0 0 100vw; width: 100vw; height: 100vh; position: relative; padding: var(--pad-y) var(--pad-x); display: grid; grid-template-rows: auto 1fr auto; overflow: hidden; }
+      .slide.dark { background: var(--c-bg); color: var(--c-fg); }
+      .slide.light { background: var(--c-bg-light); color: var(--c-fg-light); }
+      [data-anim] { opacity: 0; }
+      .slide.is-active [data-anim] { animation-duration: var(--dur-enter); animation-timing-function: var(--ease-enter); animation-fill-mode: forwards; }
+      .slide.is-active [data-anim="fade-up"] { animation-name: kFadeUp; }
+      .slide.is-active [data-anim="fade-in"] { animation-name: kFadeIn; }
+      [data-delay="0"]{animation-delay:0s}[data-delay="1"]{animation-delay:.08s}[data-delay="2"]{animation-delay:.18s}[data-delay="3"]{animation-delay:.3s}[data-delay="4"]{animation-delay:.44s}[data-delay="5"]{animation-delay:.6s}
+      @keyframes kFadeUp { from { opacity:0; transform: translateY(22px);} to {opacity:1; transform:none;} }
+      @keyframes kFadeIn { from { opacity:0;} to {opacity:1;} }
+      #nav-dots { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); display: flex; gap: 7px; z-index: 100; }
+      .nav-dot { width: 6px; height: 6px; border-radius: 50%; border: none; background: rgba(226,220,208,.22); cursor: pointer; transition: background .3s, transform .3s; padding: 0; }
+      .nav-dot.is-active { background: var(--c-accent); transform: scale(1.4); }
+      #slide-counter { position: fixed; bottom: 18px; right: 26px; font-family: var(--f-mono); font-size: 10px; letter-spacing: .12em; color: var(--c-fg-3); z-index: 100; user-select: none; }
+
+      /* ── ZONE C · TYPOGRAPHY (Signal) ─────────────────────────────────── */
+      .kicker { font-family: var(--f-mono); font-size: var(--sz-label); letter-spacing: .26em; text-transform: uppercase; color: var(--c-accent); }
+      .slide.light .kicker { color: #9c7c44; }
+      h1.t { font-family: var(--f-display); font-weight: 700; font-size: var(--sz-h1); line-height: 1.02; letter-spacing: -.015em; margin-top: .5vh; }
+      h1.t em { font-style: italic; color: var(--c-accent); }
+      .lead { font-family: var(--f-body); font-size: var(--sz-body); color: var(--c-fg-2); max-width: 52ch; margin-top: 1.2vh; }
+      .slide.light .lead { color: var(--c-fg-light-2); }
+
+      /* ── ZONE D · DASHBOARD COMPONENTS (designed in the Signal system) ── */
+      .topbar { display: flex; align-items: baseline; justify-content: space-between; border-bottom: 1px solid var(--c-border); padding-bottom: 1.4vh; }
+      .slide.light .topbar { border-color: var(--c-border-light); }
+      .brand { font-family: var(--f-display); font-weight: 700; font-size: 1.15vw; letter-spacing: -.01em; }
+      .brand span { color: var(--c-accent); }
+      .brand small { font-family: var(--f-mono); font-weight: 400; font-size: var(--sz-label); letter-spacing: .2em; text-transform: uppercase; color: var(--c-fg-2); margin-left: .8vw; }
+      .chrome-meta { font-family: var(--f-mono); font-size: var(--sz-label); letter-spacing: .16em; color: var(--c-fg-2); text-transform: uppercase; }
+      .agent-dot { color: var(--c-good); }
+      .botbar { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--c-border); padding-top: 1.2vh; font-family: var(--f-mono); font-size: var(--sz-label); letter-spacing: .16em; text-transform: uppercase; color: var(--c-fg-3); }
+      .slide.light .botbar { border-color: var(--c-border-light); }
+
+      .head { margin: 1.2vh 0 2vh; }
+
+      .cols { display: grid; gap: 1.6vw; height: 100%; min-height: 0; }
+      .cols-2 { grid-template-columns: 1fr 1fr; }
+      .cols-32 { grid-template-columns: 1.4fr 1fr; }
+      .col { min-height: 0; display: flex; flex-direction: column; gap: 1.4vh; }
+
+      .panel { border: 1px solid var(--c-border); background: var(--c-bg-alt); padding: 1.6vh 1.4vw; position: relative; }
+      .slide.light .panel { border-color: var(--c-border-light); background: var(--c-bg-light-alt); }
+      .panel::before { content: ""; position: absolute; top: 0; left: 0; width: 14px; height: 1px; background: var(--c-accent); }
+      .panel-label { font-family: var(--f-mono); font-size: var(--sz-label); letter-spacing: .2em; text-transform: uppercase; color: var(--c-fg-2); margin-bottom: 1vh; }
+
+      .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2vw; }
+      .stat .n { font-family: var(--f-display); font-weight: 700; font-size: 2.6vw; line-height: 1; }
+      .stat .l { font-family: var(--f-mono); font-size: var(--sz-label); letter-spacing: .14em; text-transform: uppercase; color: var(--c-fg-2); margin-top: .6vh; }
+      .stat .n.good { color: var(--c-good); } .stat .n.warn { color: var(--c-accent); } .stat .n.bad { color: var(--c-bad); }
+
+      .pill { display: inline-block; font-family: var(--f-mono); font-size: var(--sz-label); letter-spacing: .12em; text-transform: uppercase; padding: .3vh .6vw; border: 1px solid var(--c-border); color: var(--c-fg-2); }
+      .pill.warn { color: var(--c-accent); border-color: var(--c-accent); }
+      .pill.bad { color: var(--c-bad); border-color: var(--c-bad); }
+      .pill.good { color: var(--c-good); border-color: var(--c-good); }
+
+      .crow { font-family: var(--f-mono); font-size: var(--sz-caption); color: var(--c-fg); display: grid; grid-template-columns: 1fr auto; gap: .6vw; padding: 1vh 0; border-bottom: 1px dashed var(--c-border); }
+      .crow b { color: var(--c-accent); }
+      .delta s { color: var(--c-bad); text-decoration: line-through; } .delta i { color: var(--c-good); font-style: normal; }
+
+      .vs { display: grid; grid-template-columns: 1fr auto 1fr; align-items: stretch; gap: 1vw; }
+      .vs .side { border: 1px solid var(--c-border); padding: 1.4vh 1vw; }
+      .vs .side.bad { border-color: var(--c-bad); }
+      .vs .side.cur { border-color: var(--c-accent); }
+      .vs .side .who { font-family: var(--f-mono); font-size: var(--sz-label); letter-spacing: .14em; text-transform: uppercase; color: var(--c-fg-2); }
+      .vs .side .val { font-family: var(--f-display); font-weight: 700; font-size: 1.9vw; margin: .6vh 0; }
+      .vs .side.bad .val { color: var(--c-bad); } .vs .side.cur .val { color: var(--c-accent); }
+      .vs .mid { align-self: center; font-family: var(--f-mono); color: var(--c-fg-2); font-size: 1vw; }
+      .why { margin-top: 1.2vh; border-left: 2px solid var(--c-accent); padding-left: .9vw; font-size: var(--sz-caption); color: var(--c-fg-2); }
+      .why b { color: var(--c-fg); }
+
+      .feed { font-family: var(--f-mono); font-size: var(--sz-caption); line-height: 1.9; }
+      .feed div { color: var(--c-fg-2); }
+      .feed time { color: var(--c-fg-3); margin-right: .7vw; }
+      .feed .hit { color: var(--c-accent); } .feed .act { color: var(--c-fg); }
+
+      .im { display: flex; flex-direction: column; gap: .8vh; }
+      .bub { border: 1px solid var(--c-border); padding: .9vh 1vw; font-size: var(--sz-caption); max-width: 92%; }
+      .bub .from { font-family: var(--f-mono); font-size: var(--sz-label); letter-spacing: .12em; text-transform: uppercase; color: var(--c-accent); display: block; margin-bottom: .3vh; }
+      .bub.agent { align-self: flex-start; background: var(--c-bg); }
+      .bub.me { align-self: flex-end; background: var(--c-bg-alt); }
+
+      .graphwrap { display: flex; align-items: center; justify-content: center; height: 100%; }
+      .gnode { fill: var(--c-bg-alt); stroke: var(--c-border); stroke-width: 1.5; }
+      .gnode.fact { stroke: var(--c-accent); stroke-width: 2.5; }
+      .gnode.bad { stroke: var(--c-bad); stroke-width: 2.5; }
+      .gedge { stroke: var(--c-border); stroke-width: 1.5; }
+      .gedge.ref { stroke: var(--c-accent); stroke-dasharray: 4 3; }
+      .glabel { font-family: var(--f-mono); font-size: 11px; fill: var(--c-fg-2); letter-spacing: .04em; }
+      .glabel.t { fill: var(--c-fg); font-weight: 500; }
+
+      .tl { position: relative; padding-left: 2vw; }
+      .tl::before { content: ""; position: absolute; left: .55vw; top: .5vh; bottom: .5vh; width: 1px; background: var(--c-border-light); }
+      .tl .ev { position: relative; padding: 1vh 0 1.6vh; }
+      .tl .ev::before { content: ""; position: absolute; left: -1.7vw; top: 1.5vh; width: 9px; height: 9px; border-radius: 50%; background: var(--c-bg-light); border: 2px solid var(--c-fg-light-3); }
+      .tl .ev.cur::before { border-color: #9c7c44; background: #9c7c44; }
+      .tl .ev.gone::before { border-color: var(--c-bad); }
+      .tl .when { font-family: var(--f-mono); font-size: var(--sz-label); letter-spacing: .14em; text-transform: uppercase; color: var(--c-fg-light-2); }
+      .tl .what { font-family: var(--f-display); font-size: 1.3vw; font-weight: 600; margin: .3vh 0; }
+      .tl .ev.cur .what { color: #9c7c44; }
+      .tl .ev.gone .what { color: var(--c-bad); text-decoration: line-through; }
+      .tl .src { font-size: var(--sz-caption); color: var(--c-fg-light-2); }
+
+      .thread { display: flex; flex-direction: column; gap: 1vh; }
+      .msg { border-left: 2px solid var(--c-border); padding-left: 1vw; font-size: var(--sz-caption); color: var(--c-fg-2); }
+      .msg b { color: var(--c-fg); font-family: var(--f-mono); font-size: var(--sz-label); letter-spacing: .1em; text-transform: uppercase; }
+      .msg.esc { border-color: var(--c-accent); }
+      .resolved { border: 1px solid var(--c-good); padding: 1.4vh 1.2vw; }
+      .resolved .h { font-family: var(--f-display); font-weight: 700; font-size: 1.5vw; color: var(--c-good); }
+
+      ul.clean { list-style: none; } ul.clean li { font-size: var(--sz-caption); color: var(--c-fg-2); padding: .5vh 0; border-bottom: 1px dashed var(--c-border); }
+      ul.clean li b { color: var(--c-fg); }
+      .slide.light ul.clean li { color: var(--c-fg-light-2); border-color: var(--c-border-light); }
+      .slide.light ul.clean li b { color: var(--c-fg-light); }
+    </style>
+  </head>
+
+  <body>
+    <div id="deck">
+      <!-- ════ BEAT 0 · BASELINE ════ -->
+      <section class="slide dark is-active">
+        <div class="topbar">
+          <div class="brand">Wiki<span>Genius</span><small>Team Agent Console</small></div>
+          <div class="chrome-meta">Space · PayWallet Team &nbsp;|&nbsp; <span class="agent-dot">●</span> Team Agent active</div>
+        </div>
+        <div class="slide-body">
+          <div class="head">
+            <div class="kicker" data-anim="fade-in">Beat 0 · Baseline</div>
+            <h1 class="t" data-anim="fade-up">The team's knowledge is <em>coherent</em>.</h1>
+            <p class="lead" data-anim="fade-up" data-delay="1">Three teams — Growth, Product, Risk — share one knowledge space. Watch one routine edit.</p>
+          </div>
+          <div class="cols cols-32">
+            <div class="col">
+              <div class="panel" data-anim="fade-up" data-delay="2">
+                <div class="panel-label">PARA status · node counts</div>
+                <div class="stats">
+                  <div class="stat"><div class="n">2</div><div class="l">Projects</div></div>
+                  <div class="stat"><div class="n">1</div><div class="l">Areas</div></div>
+                  <div class="stat"><div class="n">1</div><div class="l">Archives</div></div>
+                  <div class="stat"><div class="n good">0</div><div class="l">Open conflicts</div></div>
+                </div>
+              </div>
+              <div class="panel" data-anim="fade-up" data-delay="3" style="flex:1">
+                <div class="panel-label">What the Team Agent is doing</div>
+                <div class="feed">
+                  <div><time>09:02</time><span class="act">+sync</span> knowledge map refreshed · 24 current-truth facts</div>
+                  <div><time>09:02</time>consistency scan idle · no pending changes</div>
+                  <div><time>08:40</time><span class="act">+audit</span> 0 stale nodes flagged</div>
+                </div>
+              </div>
+            </div>
+            <div class="panel" data-anim="fade-up" data-delay="3">
+              <div class="panel-label">Knowledge graph · FACT-ONBOARD-MIN</div>
+              <div class="graphwrap">
+                <svg viewBox="0 0 360 300" width="100%" height="100%">
+                  <line class="gedge ref" x1="180" y1="150" x2="70" y2="70"/>
+                  <line class="gedge ref" x1="180" y1="150" x2="300" y2="70"/>
+                  <line class="gedge ref" x1="180" y1="150" x2="180" y2="255"/>
+                  <circle class="gnode fact" cx="180" cy="150" r="34"/>
+                  <text class="glabel t" x="180" y="147" text-anchor="middle">FACT</text>
+                  <text class="glabel" x="180" y="161" text-anchor="middle">6-mo floor</text>
+                  <circle class="gnode" cx="70" cy="70" r="24"/><text class="glabel" x="70" y="74" text-anchor="middle">BD doc</text>
+                  <circle class="gnode" cx="300" cy="70" r="24"/><text class="glabel" x="300" y="74" text-anchor="middle">Risk</text>
+                  <circle class="gnode" cx="180" cy="255" r="24"/><text class="glabel" x="180" y="259" text-anchor="middle">PM PRD</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="botbar"><span>WikiGenius · consistency layer</span><span>← / → to advance</span></div>
+      </section>
+
+      <!-- ════ BEAT 1 · SUBMISSION ════ -->
+      <section class="slide dark">
+        <div class="topbar">
+          <div class="brand">Wiki<span>Genius</span><small>Team Agent Console</small></div>
+          <div class="chrome-meta">Space · PayWallet Team &nbsp;|&nbsp; <span class="agent-dot">●</span> Team Agent active</div>
+        </div>
+        <div class="slide-body">
+          <div class="head">
+            <div class="kicker" data-anim="fade-in">Beat 1 · Change submitted (async)</div>
+            <h1 class="t" data-anim="fade-up">Bella lowers the bar — then <em>walks away</em>.</h1>
+          </div>
+          <div class="cols cols-2">
+            <div class="panel" data-anim="fade-up" data-delay="1">
+              <div class="panel-label">User Agent · Bella (BD, Member)</div>
+              <div class="im">
+                <div class="bub me"><span class="from">Bella → her agent</span>"Lower high-risk merchant onboarding to 1-month history — chasing the Q2 growth target."</div>
+                <div class="bub agent"><span class="from">User Agent</span>Decomposed → 1 claim. Submitted change CHG-DEMO-001 to the Team Agent. You can go — I'll carry it.</div>
+              </div>
+            </div>
+            <div class="panel" data-anim="fade-up" data-delay="2">
+              <div class="panel-label">Change board</div>
+              <div class="crow"><span><b>CHG-DEMO-001</b> · node FACT-ONBOARD-MIN</span><span class="pill warn">submitted → evaluating</span></div>
+              <div class="crow"><span class="delta">min operating history &nbsp;<s>6 months</s> → <i>1 month</i></span><span>by Bella</span></div>
+              <p class="lead" style="font-size:var(--sz-caption); margin-top:1.4vh">Submission is asynchronous. The Team Agent now evaluates in the background; Bella doesn't have to wait.</p>
+            </div>
+          </div>
+        </div>
+        <div class="botbar"><span>change lifecycle · submitted</span><span>Beat 1 / 7</span></div>
+      </section>
+
+      <!-- ════ BEAT 2 · CONFLICT (HERO) ════ -->
+      <section class="slide dark">
+        <div class="topbar">
+          <div class="brand">Wiki<span>Genius</span><small>Team Agent Console</small></div>
+          <div class="chrome-meta">Space · PayWallet Team &nbsp;|&nbsp; <span class="pill bad">section frozen</span></div>
+        </div>
+        <div class="slide-body">
+          <div class="head">
+            <div class="kicker" data-anim="fade-in">Beat 2 · Consistency conflict — surfaced unprompted</div>
+            <h1 class="t" data-anim="fade-up">This contradicts an <em>anti-fraud policy</em> Bella never saw.</h1>
+          </div>
+          <div class="cols cols-32">
+            <div class="col">
+              <div class="panel" data-anim="fade-up" data-delay="1">
+                <div class="panel-label">Conflict · CHG-DEMO-001</div>
+                <div class="vs">
+                  <div class="side bad"><div class="who">Proposed · BD</div><div class="val">1 mo</div><div class="pill bad">new</div></div>
+                  <div class="mid">⟕ contradicts ⟖</div>
+                  <div class="side cur"><div class="who">Current truth · Anti-fraud</div><div class="val">6 mo</div><div class="pill warn">in force</div></div>
+                </div>
+                <div class="why" data-anim="fade-in" data-delay="3">
+                  <b>Why this?</b> &nbsp;Rule: a change that negates a fact justified by an incident is a contradiction, not an update. Evidence: FACT-FRAUD-4X (4× chargeback rate below the floor), derived from INC-2025-0814. Action: freeze the section, route to humans — do not auto-apply, do not auto-reject.
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="panel" data-anim="fade-up" data-delay="2">
+                <div class="panel-label">Team Agent activity</div>
+                <div class="feed">
+                  <div><time>t+3s</time><span class="act">claimed</span> node FACT-ONBOARD-MIN (atomic)</div>
+                  <div><time>t+5s</time>consistency check vs neighborhood…</div>
+                  <div><time>t+6s</time><span class="hit">contradiction found</span> — anti-fraud policy</div>
+                  <div><time>t+6s</time><span class="act">froze</span> section (rest of doc stays editable)</div>
+                  <div><time>t+7s</time><span class="act">notified</span> Bella + Adam via Lark IM</div>
+                </div>
+              </div>
+              <div class="panel" data-anim="fade-up" data-delay="3">
+                <div class="panel-label">Lark IM · unprompted</div>
+                <div class="im">
+                  <div class="bub agent"><span class="from">Team Agent → Bella, Adam</span>Heads up: lowering the onboarding floor to 1mo contradicts the anti-fraud policy (6-mo floor, INC-2025-0814). Section frozen pending alignment.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="botbar"><span>★ hero moment · not search, coherence</span><span>Beat 2 / 7</span></div>
+      </section>
+
+      <!-- ════ BEAT 3 · RIPPLE ════ -->
+      <section class="slide dark">
+        <div class="topbar">
+          <div class="brand">Wiki<span>Genius</span><small>Team Agent Console</small></div>
+          <div class="chrome-meta">Space · PayWallet Team &nbsp;|&nbsp; <span class="pill warn">structural change</span></div>
+        </div>
+        <div class="slide-body">
+          <div class="head">
+            <div class="kicker" data-anim="fade-in">Beat 3 · Impact scope</div>
+            <h1 class="t" data-anim="fade-up">Not a local edit — a change to <em>shared truth</em>.</h1>
+          </div>
+          <div class="cols cols-32">
+            <div class="panel" data-anim="fade-up" data-delay="1">
+              <div class="panel-label">FACT-ONBOARD-MIN · referenced by 3 teams</div>
+              <div class="graphwrap">
+                <svg viewBox="0 0 360 300" width="100%" height="100%">
+                  <line class="gedge ref" x1="180" y1="150" x2="70" y2="70"/>
+                  <line class="gedge ref" x1="180" y1="150" x2="300" y2="70"/>
+                  <line class="gedge ref" x1="180" y1="150" x2="180" y2="255"/>
+                  <circle class="gnode bad" cx="180" cy="150" r="36"/>
+                  <text class="glabel t" x="180" y="147" text-anchor="middle">FACT</text>
+                  <text class="glabel" x="180" y="161" text-anchor="middle">6→1?</text>
+                  <circle class="gnode" cx="70" cy="70" r="26"/><text class="glabel" x="70" y="67" text-anchor="middle">BD</text><text class="glabel" x="70" y="80" text-anchor="middle">Threshold</text>
+                  <circle class="gnode" cx="300" cy="70" r="26"/><text class="glabel" x="300" y="67" text-anchor="middle">Risk</text><text class="glabel" x="300" y="80" text-anchor="middle">Policy</text>
+                  <circle class="gnode" cx="180" cy="255" r="26"/><text class="glabel" x="180" y="252" text-anchor="middle">PM</text><text class="glabel" x="180" y="265" text-anchor="middle">PRD</text>
+                </svg>
+              </div>
+            </div>
+            <div class="col">
+              <div class="panel" data-anim="fade-up" data-delay="2">
+                <div class="panel-label">Why it clears a higher bar</div>
+                <p class="lead" style="font-size:var(--sz-caption)">One fact, three dependents. Supersession-scope detection flags this as <b style="color:var(--c-accent)">structural</b>, so every owner who depends on it is pulled in — not just BD.</p>
+                <ul class="clean" style="margin-top:1vh">
+                  <li><b>Bella</b> · BD — proposed the change</li>
+                  <li><b>Adam</b> · Anti-fraud — owns the fact</li>
+                  <li><b>Priya</b> · PM — her onboarding-flow PRD assumes this gate</li>
+                </ul>
+              </div>
+              <div class="panel" data-anim="fade-up" data-delay="3">
+                <div class="panel-label">Lark IM</div>
+                <div class="im"><div class="bub agent"><span class="from">Team Agent → Priya</span>Your Onboarding-flow PRD depends on this floor. It's under review — looping you in before anything changes.</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="botbar"><span>impact · structural · 3 teams</span><span>Beat 3 / 7</span></div>
+      </section>
+
+      <!-- ════ BEAT 4 · TRUTH TIME-TRAVEL (light) ════ -->
+      <section class="slide light">
+        <div class="topbar">
+          <div class="brand">Wiki<span>Genius</span><small>Truth History</small></div>
+          <div class="chrome-meta" style="color:var(--c-fg-light-2)">FACT-ONBOARD-MIN · bi-temporal</div>
+        </div>
+        <div class="slide-body">
+          <div class="head">
+            <div class="kicker" data-anim="fade-in">Beat 4 · The "why" a wiki can't answer</div>
+            <h1 class="t" data-anim="fade-up">Why 6 months — and has it <em>always</em> been?</h1>
+          </div>
+          <div class="cols cols-2">
+            <div class="panel" data-anim="fade-up" data-delay="1" style="background:transparent;border:none">
+              <div class="tl">
+                <div class="ev"><div class="when">2024-03 · superseded</div><div class="what">Floor = 3 months</div><div class="src">Early growth phase · set by BD-2024</div></div>
+                <div class="ev cur"><div class="when">2025-08 · current truth</div><div class="what">Floor = 6 months</div><div class="src">Raised after incident INC-2025-0814 · owner Adam · justified by 4× fraud rate</div></div>
+                <div class="ev gone"><div class="when">2025-Q4 · reverted</div><div class="what">BD tried 6 → 3</div><div class="src">Rejected by Risk (CHG-2025Q4-001) — the same move, already reversed once</div></div>
+              </div>
+            </div>
+            <div class="panel" data-anim="fade-up" data-delay="2">
+              <div class="panel-label">Chesterton's fence, with receipts</div>
+              <p class="lead" style="color:var(--c-fg-light-2)">The floor isn't arbitrary. It was raised <b style="color:#9c7c44">after a fraud incident</b>, and the <b style="color:var(--c-bad)">exact change Bella is proposing was already tried in Q4 and reverted.</b></p>
+              <p class="lead" style="color:var(--c-fg-light-2); margin-top:1.2vh">WikiGenius can reconstruct what the team held true at any point in time, and who decided it — so nobody re-opens a closed decision blind.</p>
+            </div>
+          </div>
+        </div>
+        <div class="botbar" style="color:var(--c-fg-light-3)"><span>truth-lossless · time-travel</span><span>Beat 4 / 7</span></div>
+      </section>
+
+      <!-- ════ BEAT 5 · NEGOTIATE / ESCALATE ════ -->
+      <section class="slide dark">
+        <div class="topbar">
+          <div class="brand">Wiki<span>Genius</span><small>Team Agent Console</small></div>
+          <div class="chrome-meta">Space · PayWallet Team &nbsp;|&nbsp; <span class="pill warn">negotiating</span></div>
+        </div>
+        <div class="slide-body">
+          <div class="head">
+            <div class="kicker" data-anim="fade-in">Beat 5 · Resolve in-thread · escalate if deadlocked</div>
+            <h1 class="t" data-anim="fade-up">Humans decide. The agent <em>routes and records</em>.</h1>
+          </div>
+          <div class="cols cols-2">
+            <div class="panel" data-anim="fade-up" data-delay="1">
+              <div class="panel-label">Negotiation thread · CHG-DEMO-001</div>
+              <div class="thread">
+                <div class="msg"><b>Adam · Risk</b><br/>The 6-mo floor came straight out of INC-2025-0814. Can't drop to 1mo.</div>
+                <div class="msg"><b>Bella · BD</b><br/>I need a faster path for growth. Is there a middle ground?</div>
+                <div class="msg"><b>Team Agent</b><br/>Proposed compromise: floor = 3mo + enhanced monitoring + lower initial limit for &lt;6mo merchants.</div>
+                <div class="msg esc"><b>↑ escalation rule</b><br/>If no agreement before TTL, route to Rex (Space Admin) for arbitration.</div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="panel" data-anim="fade-up" data-delay="2">
+                <div class="panel-label">Resolution</div>
+                <div class="resolved">
+                  <div class="h">Conditional approval</div>
+                  <p class="lead" style="font-size:var(--sz-caption); margin-top:.8vh">Floor → <b style="color:var(--c-good)">3 months</b> + monitoring + capped initial limit. Agreed by Bella &amp; Adam.</p>
+                </div>
+              </div>
+              <div class="panel" data-anim="fade-up" data-delay="3">
+                <div class="panel-label">Provenance (accountability)</div>
+                <ul class="clean">
+                  <li>decided by · <b>Bella (BD)</b> + <b>Adam (Risk)</b></li>
+                  <li>arbiter on deadlock · <b>Rex (Space Admin)</b></li>
+                  <li>recorded against · CHG-DEMO-001</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="botbar"><span>negotiate · escalate · accountable</span><span>Beat 5 / 7</span></div>
+      </section>
+
+      <!-- ════ BEAT 6 · RESOLVED ════ -->
+      <section class="slide dark">
+        <div class="topbar">
+          <div class="brand">Wiki<span>Genius</span><small>Team Agent Console</small></div>
+          <div class="chrome-meta">Space · PayWallet Team &nbsp;|&nbsp; <span class="agent-dot">●</span> coherent</div>
+        </div>
+        <div class="slide-body">
+          <div class="head">
+            <div class="kicker" data-anim="fade-in">Beat 6 · Resolved</div>
+            <h1 class="t" data-anim="fade-up">One decision. Three docs <em>re-aligned</em>. Section unfrozen.</h1>
+            <p class="lead" data-anim="fade-up" data-delay="1">A silent contradiction — and a repeat of a mistake already reverted once — caught before it shipped.</p>
+          </div>
+          <div class="cols cols-32">
+            <div class="panel" data-anim="fade-up" data-delay="2">
+              <div class="panel-label">Outcome</div>
+              <div class="stats">
+                <div class="stat"><div class="n good">0</div><div class="l">Open conflicts</div></div>
+                <div class="stat"><div class="n good">1×</div><div class="l">Fact updated</div></div>
+                <div class="stat"><div class="n good">3</div><div class="l">Docs realigned</div></div>
+                <div class="stat"><div class="n good">✓</div><div class="l">Section unfrozen</div></div>
+              </div>
+              <p class="lead" style="font-size:var(--sz-caption); margin-top:1.6vh">The shared fact updated <b style="color:var(--c-accent)">once</b>; BD / Risk / PM docs now agree; the superseded 6-mo value is kept as history, fully recoverable.</p>
+            </div>
+            <div class="panel" data-anim="fade-up" data-delay="3">
+              <div class="panel-label">WikiGenius — the team's consistency layer</div>
+              <ul class="clean">
+                <li>Not RAG, not a smarter wiki — a <b>consistency layer</b></li>
+                <li>The agent <b>surfaces, unprompted</b></li>
+                <li>Truth has <b>history</b> (what was true, when, who)</li>
+                <li>Coordination is <b>shown</b>, not claimed</li>
+                <li>Humans stay <b>accountable</b></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="botbar"><span>WikiGenius · consistency layer</span><span>Beat 6 / 7 · Home to restart</span></div>
+      </section>
+    </div>
+
+    <div id="nav-dots"></div>
+    <div id="slide-counter"></div>
+
+    <script>
+      /* SIGNAL PRESENTATION ENGINE — self-contained nav (keyboard / wheel / touch / dots). */
+      (function () {
+        "use strict";
+        const deck = document.getElementById("deck");
+        const slides = Array.from(document.querySelectorAll(".slide"));
+        const dotsEl = document.getElementById("nav-dots");
+        const counter = document.getElementById("slide-counter");
+        const total = slides.length;
+        let current = 0, animating = false;
+        function init() {
+          deck.style.width = total + "00vw";
+          slides.forEach(function (_, i) {
+            const b = document.createElement("button");
+            b.className = "nav-dot"; b.setAttribute("aria-label", "Beat " + i);
+            b.addEventListener("click", function () { goTo(i); });
+            dotsEl.appendChild(b);
+          });
+          goTo(0, true);
+        }
+        function goTo(index, instant) {
+          index = Math.max(0, Math.min(total - 1, index));
+          if (index === current && !instant) return;
+          animating = true;
+          const prev = slides[current];
+          prev.classList.remove("is-active");
+          void prev.offsetWidth;
+          if (instant) { deck.style.transition = "none"; deck.style.transform = "translateX(-" + index + "00vw)"; void deck.offsetWidth; deck.style.transition = ""; }
+          else { deck.style.transform = "translateX(-" + index + "00vw)"; }
+          current = index;
+          slides[current].classList.add("is-active");
+          Array.from(dotsEl.children).forEach(function (d, i) { d.classList.toggle("is-active", i === current); });
+          counter.textContent = (current + 1) + " / " + total;
+          const delay = instant ? 0 : parseFloat(getComputedStyle(deck).transitionDuration) * 1000;
+          setTimeout(function () { animating = false; }, delay);
+        }
+        document.addEventListener("keydown", function (e) {
+          if (animating) return;
+          if (e.key === "ArrowRight" || e.key === "ArrowDown" || e.key === " ") { e.preventDefault(); goTo(current + 1); }
+          else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); goTo(current - 1); }
+          else if (e.key === "Home") { e.preventDefault(); goTo(0); }
+          else if (e.key === "End") { e.preventDefault(); goTo(total - 1); }
+        });
+        let wheelCooldown = false;
+        document.addEventListener("wheel", function (e) {
+          e.preventDefault();
+          if (animating || wheelCooldown) return;
+          wheelCooldown = true; setTimeout(function () { wheelCooldown = false; }, 900);
+          if (e.deltaY > 0 || e.deltaX > 0) goTo(current + 1); else goTo(current - 1);
+        }, { passive: false });
+        let tx = null, ty = null;
+        document.addEventListener("touchstart", function (e) { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+        document.addEventListener("touchend", function (e) {
+          if (tx === null) return;
+          const dx = tx - e.changedTouches[0].clientX, dy = ty - e.changedTouches[0].clientY;
+          if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) { if (!animating) goTo(current + (dx > 0 ? 1 : -1)); }
+          tx = ty = null;
+        }, { passive: true });
+        init();
+      })();
+    </script>
+  </body>
+</html>

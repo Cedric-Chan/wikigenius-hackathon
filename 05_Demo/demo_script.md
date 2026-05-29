@@ -8,7 +8,7 @@
 
 - **Seed loaded** ([`seed_data.md`](seed_data.md)): the shared fact + history, 3 referencing docs, the reverted 2025-Q4 attempt, roles. Only `CHG-DEMO-001` is processed live.
 - **Two surfaces visible:**
-  - **A — WikiGenius HTML dashboard** (beautiful-html-templates): graph view, "What the Team Agent is doing" feed, conflict timeline, "Why this?" panel, PARA node-count status.
+  - **A — WikiGenius HTML dashboard** → [`dashboard/index.html`](dashboard/index.html) (skeleton built on the "Signal" template; one screen per beat, navigate ← / →): graph view, "What the Team Agent is doing" feed, conflict panel + "Why this?", truth-history timeline, PARA node-count status.
   - **B — Lark IM** (where the agent pings land).
 - **Backup video recorded** of this exact path.
 
