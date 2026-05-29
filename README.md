@@ -30,6 +30,9 @@
 - [Design — Ingest Pipeline (Decompose→Match→Merge)](03_Design/ingest_pipeline.md)
 - [Design — Lark Wiki MVP](03_Design/lark_wiki_mvp.md)
 - [Design — 协调协议 (D7 种子)](03_Design/coordination_protocol.md)
+- [Design — B1 Demo Scenario](03_Design/b1_demo_scenario.md)
+- [Demo — Script (golden path)](05_Demo/demo_script.md)
+- [Demo — Seed Data](05_Demo/seed_data.md)
 
 ## Status
 
@@ -37,9 +40,9 @@
 |-------|--------|-------|
 | Proposal | Drafted | See `01_Proposal/PROPOSAL.md` |
 | Research | In Progress | 7 docs + 10 paper PDFs — see `02_Research/README.md` |
-| Design | In Progress | Carrier=Lark Wiki, ingest pipeline + MVP designed; awaiting B1 demo wedge — see `03_Design/` |
-| Build | Not started | |
-| Demo | Not started | |
+| Design | In Progress | Carrier=Lark Wiki; ingest + Lark MVP + D7 coordination seed + B1 scenario done — see `03_Design/` |
+| Build | Not started | Next gate: Graphiti spike (`04_Build/experiments/graphiti_spike.md`) |
+| Demo | In Progress | B1 golden-path script + seed data ready — see `05_Demo/` |
 | Submission | Not started | |
 
 ---

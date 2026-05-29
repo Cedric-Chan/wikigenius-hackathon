@@ -12,6 +12,7 @@ Product spec, system architecture, and agent protocol design live here.
 | [`ingest_pipeline.md`](ingest_pipeline.md) | **"Digest, don't pile"** — Decompose→Match→Merge as the *front half* of the change pipeline (User Agent ingestion → existing 3-dim evaluation), graph-grounded Match, agent-behavior `+` ops, native promotion gate (answers D2). |
 | [`lark_wiki_mvp.md`](lark_wiki_mvp.md) | Lark Wiki as carrier: concept→Lark-primitive mapping with **real lark-cli v1.0.43 commands**, permission mapping, two-tier agent flow, hackathon MVP shape (answers B3). |
 | [`coordination_protocol.md`](coordination_protocol.md) | **D7 seed.** Change/conflict lifecycle as a Kanban-style state machine (durable change-rows, atomic claim = section-freeze, parent→child unfreeze, comment/IM negotiation, TTL→escalation). Borrows Hermes Kanban's coordination model; pairs with the Graphiti consistency core. |
+| [`b1_demo_scenario.md`](b1_demo_scenario.md) | **B1 demo wedge (CONFIRMED).** One cross-team incident (BD lowers onboarding bar → hits anti-fraud policy → shared fact ripples to 3 teams → truth time-travel reveals a prior reverted attempt). Drives the demo script + seed data in `05_Demo/`. |
 
 ## Suggested contents
 

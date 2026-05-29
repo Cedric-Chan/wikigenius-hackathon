@@ -2,16 +2,14 @@
 
 > **用途.** Design 阶段要产出 product spec / UX flows / system architecture / agent protocol / data model（见本目录 [`README.md`](README.md)）。但要把这些做对，目前缺一批**决策和输入**。本文按"是否阻塞设计开始"分级罗列。🔴 需要你拍板，🟡 给方向后我们来设计。
 
-> **进度更新（2026-05-29）.** ✅ **B2** 已定（原型+演示+HTML，模板参考 beautiful-html-templates）。✅ **B3** 已定（Lark Wiki 为载体）——设计见 [`lark_wiki_mvp.md`](lark_wiki_mvp.md)。✅ **D2 入图 pipeline** 已落（Decompose-Match-Merge）——见 [`ingest_pipeline.md`](ingest_pipeline.md)，并部分回答 D1/D4/D12。📚 **工程选型已调研**——见 [`../02_Research/tech_references.md`](../02_Research/tech_references.md)：头号引擎 **Graphiti**（双时态图+被取代+矛盾，待半天 spike），agents=CrewAI/LangGraph，矛盾=RefChecker/NLI，真值只用 Graphiti 双时态；**内部 agent 协调走框架原生 + MCP 包 lark-cli，A2A 降为未来可选（跨组织/跨厂商才需要，不进 MVP）**。⏳ **B1**（demo 楔子）仍待定。**下一步前置 = Graphiti spike + B1**，然后进 D1/D5/D7 细节。
+> **进度更新（2026-05-29）.** ✅ **B2** 已定（原型+演示+HTML，模板参考 beautiful-html-templates）。✅ **B3** 已定（Lark Wiki 为载体）——设计见 [`lark_wiki_mvp.md`](lark_wiki_mvp.md)。✅ **D2 入图 pipeline** 已落（Decompose-Match-Merge）——见 [`ingest_pipeline.md`](ingest_pipeline.md)，并部分回答 D1/D4/D12。📚 **工程选型已调研**——见 [`../02_Research/tech_references.md`](../02_Research/tech_references.md)：头号引擎 **Graphiti**（双时态图+被取代+矛盾，待半天 spike），agents=CrewAI/LangGraph，矛盾=RefChecker/NLI，真值只用 Graphiti 双时态；**内部 agent 协调走框架原生 + MCP 包 lark-cli，A2A 降为未来可选（跨组织/跨厂商才需要，不进 MVP）**。✅ **B1**（demo 楔子）已定——见 [`b1_demo_scenario.md`](b1_demo_scenario.md)（BD×反欺诈跨团队矛盾 + 共享事实波及三团队 + 真值时间旅行），已产出 demo 脚本 + 种子数据（`../05_Demo/`）。**下一步前置 = Graphiti spike**，然后进 D1/D5 细节。
 
 ---
 
 ## 🔴 Blocking — 需要你先拍板（缺这些 design 无法真正开始）
 
-### B1. Demo 楔子：一个具体场景 ⏳ 待定
-Proposal 是抽象的产品愿景，但设计必须锚定**一个**最能体现"WikiGenius 明显更好"的工作流（[`../02_Research/km_trends.md`](../02_Research/km_trends.md) 自己提的 open question）。需要你定：
-- 目标团队画像：团队规模？什么职能（工程 / 风控 / 跨职能）？
-- 一个具体冲突故事：谁改了什么、和什么已有知识矛盾、Agent 如何介入（参考 Proposal 里 API rate limit 那个例子，但要落到你们真实的场景）。
+### B1. Demo 楔子：一个具体场景 ✅ 已定
+锁定为跨职能事故叙事，见 [`b1_demo_scenario.md`](b1_demo_scenario.md)：BD 降准入门槛 → 撞反欺诈策略 → 该门槛是 PM/BD/反欺诈共享引用的单点事实（波及三团队）→ 真值时间旅行揭出"曾被尝试并驳回"。已产出 [`../05_Demo/demo_script.md`](../05_Demo/demo_script.md) + [`../05_Demo/seed_data.md`](../05_Demo/seed_data.md)。C 并发 beat 暂排除（留作未来）。
 
 ### B2. Hackathon 交付形态与约束 ✅ 已定
 - 交付物 = **可运行原型 + 现场演示 + HTML**（不再是 slides）；演示面模板参考 [`zarazhangrui/beautiful-html-templates`](https://github.com/zarazhangrui/beautiful-html-templates)（34 套、浏览器直开、无 build）。落地见 [`lark_wiki_mvp.md`](lark_wiki_mvp.md) §5。
